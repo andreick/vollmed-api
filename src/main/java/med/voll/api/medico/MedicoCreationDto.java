@@ -17,6 +17,10 @@ public record MedicoCreationDto(
         String email,
 
         @NotNull
+        @Pattern(regexp = "[1-9]{2}(9[1-9]|[2-8])\\d{7}")
+        String telefone,
+
+        @NotNull
         @Pattern(regexp = "\\d{6}")
         String crm,
 
