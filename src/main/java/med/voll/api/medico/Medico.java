@@ -27,7 +27,7 @@ public class Medico {
     @Embedded
     private Endereco endereco;
 
-    public Medico(MedicoCreationDto dto) {
+    public Medico(MedicoCreateDto dto) {
         nome = dto.nome();
         email = dto.email();
         telefone = dto.telefone();
