@@ -6,10 +6,12 @@ import med.voll.api.medico.MedicoCreateDto;
 import med.voll.api.medico.MedicoReadDto;
 import med.voll.api.medico.MedicoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/medicos")
@@ -25,7 +27,7 @@ public class MedicoController {
     }
 
     @GetMapping
-    public List<MedicoReadDto> read() {
-        return repository.findAll().stream().map(MedicoReadDto::new).toList();
+    public Page<MedicoReadDto> read(@PageableDefault(size = 20, sort = {"nome", "crm"}, direction = Sort.Direction.DESC) Pageable pageable) {
+        return repository.findAll(pageable).map(MedicoReadDto::new);
     }
 }
