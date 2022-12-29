@@ -35,4 +35,16 @@ public class Medico {
         especialidade = dto.especialidade();
         endereco = new Endereco(dto.endereco());
     }
+
+    public void update(MedicoUpdateDto dto) {
+        if (dto.nome() != null) {
+            nome = dto.nome();
+        }
+        if (dto.telefone() != null) {
+            telefone = dto.telefone();
+        }
+        if (dto.endereco() != null) {
+            endereco = new Endereco(dto.endereco());
+        }
+    }
 }

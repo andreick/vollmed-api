@@ -3,6 +3,7 @@ package med.voll.api.endereco;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
+import med.voll.api.annotation.constraints.CepSemMascara;
 
 public record EnderecoDto(
 
@@ -24,7 +25,7 @@ public record EnderecoDto(
         String uf,
 
         @NotNull
-        @Pattern(regexp = "\\d{5}-\\d{3}")
+        @CepSemMascara
         String cep
 ) {
 }
