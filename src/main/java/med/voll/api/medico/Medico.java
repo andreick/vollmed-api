@@ -27,6 +27,8 @@ public class Medico {
     @Embedded
     private Endereco endereco;
 
+    private boolean ativo;
+
     public Medico(MedicoCreateDto dto) {
         nome = dto.nome();
         email = dto.email();
@@ -34,6 +36,7 @@ public class Medico {
         crm = dto.crm();
         especialidade = dto.especialidade();
         endereco = new Endereco(dto.endereco());
+        ativo = true;
     }
 
     public void update(MedicoUpdateDto dto) {
@@ -46,5 +49,9 @@ public class Medico {
         if (dto.endereco() != null) {
             endereco = new Endereco(dto.endereco());
         }
+    }
+
+    public void delete() {
+        ativo = false;
     }
 }

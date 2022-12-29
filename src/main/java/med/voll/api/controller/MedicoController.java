@@ -27,7 +27,7 @@ public class MedicoController {
 
     @GetMapping
     public Page<MedicoReadDto> read(@PageableDefault(size = 20, sort = {"nome", "crm"}, direction = Sort.Direction.DESC) Pageable pageable) {
-        return repository.findAll(pageable).map(MedicoReadDto::new);
+        return repository.findAllByAtivoTrue(pageable).map(MedicoReadDto::new);
     }
 
     @PutMapping
@@ -35,5 +35,12 @@ public class MedicoController {
     public void update(@RequestBody @Valid MedicoUpdateDto dto) {
         Optional<Medico> optMedico = repository.findById(dto.id());
         optMedico.ifPresent(medico -> medico.update(dto));
+    }
+
+    @DeleteMapping("/{id}")
+    @Transactional
+    public void delete(@PathVariable Long id) {
+        Optional<Medico> optMedico = repository.findById(id);
+        optMedico.ifPresent(Medico::delete);
     }
 }
