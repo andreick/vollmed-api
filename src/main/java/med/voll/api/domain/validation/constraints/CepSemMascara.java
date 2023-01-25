@@ -1,4 +1,4 @@
-package med.voll.api.annotation.constraints;
+package med.voll.api.domain.validation.constraints;
 
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
@@ -12,15 +12,15 @@ import java.lang.annotation.Target;
 
 import static java.lang.annotation.ElementType.*;
 
-@Pattern(regexp = "[1-9]{2}(9[1-9]|[2-8])\\d{7}")
+@Pattern(regexp = "\\d{8}")
 @ReportAsSingleViolation
 @Target({METHOD, FIELD, ANNOTATION_TYPE, CONSTRUCTOR, PARAMETER, TYPE_USE})
 @Retention(RetentionPolicy.RUNTIME)
-@Constraint(validatedBy = {})
 @Documented
-public @interface TelefoneSemMascara {
+@Constraint(validatedBy = {})
+public @interface CepSemMascara {
 
-    String message() default "deve ser um telefone válido sem máscara de 10 ou 11 dígitos";
+    String message() default "deve ser um cep válido sem máscara";
 
     Class<?>[] groups() default {};
 

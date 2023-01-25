@@ -1,9 +1,9 @@
-package med.voll.api.endereco;
+package med.voll.api.domain.endereco;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
-import med.voll.api.annotation.constraints.CepSemMascara;
+import med.voll.api.domain.validation.constraints.CepSemMascara;
 
 public record EnderecoDto(
 

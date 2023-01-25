@@ -1,10 +1,10 @@
-package med.voll.api.medico;
+package med.voll.api.domain.medico;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
-import med.voll.api.annotation.constraints.NullOrNotBlank;
-import med.voll.api.annotation.constraints.TelefoneSemMascara;
-import med.voll.api.endereco.EnderecoDto;
+import med.voll.api.domain.validation.constraints.NullOrNotBlank;
+import med.voll.api.domain.validation.constraints.TelefoneSemMascara;
+import med.voll.api.domain.endereco.EnderecoDto;
 
 public record MedicoUpdateDto(
 
