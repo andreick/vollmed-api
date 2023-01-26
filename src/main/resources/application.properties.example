@@ -1,10 +1,16 @@
+# MySQL
 spring.datasource.url=
 spring.datasource.username=
 spring.datasource.password=
 
+# Data
 spring.data.web.pageable.page-parameter=pagina
 spring.data.web.pageable.size-parameter=tamanho
 spring.data.web.sort.sort-parameter=ordem
 
+# JPA
 spring.jpa.show-sql=true
 spring.jpa.properties.hibernate.format_sql=true
+
+# Error
+server.error.include-stacktrace=never
