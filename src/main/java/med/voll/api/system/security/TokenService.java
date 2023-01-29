@@ -12,6 +12,8 @@ import java.time.temporal.ChronoUnit;
 @Service
 public class TokenService {
 
+    private final String issuer = "Voll.med API";
+
     @Value("${api.security.token.secret}")
     private String secret;
 
@@ -20,9 +22,18 @@ public class TokenService {
         var expirationTime = Instant.now().plus(2, ChronoUnit.HOURS);
         var algorithm = Algorithm.HMAC256(secret);
         return JWT.create()
-                .withIssuer("Voll.med API")
+                .withIssuer(issuer)
                 .withSubject(subject)
                 .withExpiresAt(expirationTime)
                 .sign(algorithm);
+    }
+
+    public Long getUsuarioId(String token) {
+        var algorithm = Algorithm.HMAC256(secret);
+        var decodedJWT = JWT.require(algorithm)
+                .withIssuer(issuer)
+                .build()
+                .verify(token);
+        return Long.parseLong(decodedJWT.getSubject());
     }
 }
