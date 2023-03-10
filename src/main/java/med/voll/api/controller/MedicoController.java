@@ -1,7 +1,13 @@
 package med.voll.api.controller;
 
 import jakarta.validation.Valid;
-import med.voll.api.domain.medico.*;
+import med.voll.api.domain.medico.Medico;
+import med.voll.api.domain.medico.MedicoRepository;
+import med.voll.api.domain.medico.dto.MedicoCreateDto;
+import med.voll.api.domain.medico.dto.MedicoDetailsDto;
+import med.voll.api.domain.medico.dto.MedicoReadDto;
+import med.voll.api.domain.medico.dto.MedicoUpdateDto;
+import med.voll.api.domain.medico.exception.MedicoNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -30,7 +36,7 @@ public class MedicoController {
     }
 
     @GetMapping
-    public ResponseEntity<Page<MedicoReadDto>> read(@PageableDefault(size = 20, sort = {"nome", "crm"},
+    public ResponseEntity<Page<MedicoReadDto>> readAll(@PageableDefault(size = 20, sort = {"nome", "crm"},
             direction = Sort.Direction.DESC) Pageable pageable) {
         var page = repository.findAllByAtivoTrue(pageable).map(MedicoReadDto::new);
         return ResponseEntity.ok(page);
@@ -39,7 +45,7 @@ public class MedicoController {
     @PutMapping
     @Transactional
     public ResponseEntity<MedicoDetailsDto> update(@RequestBody @Valid MedicoUpdateDto dto) {
-        var medico = repository.getReferenceById(dto.id());
+        var medico = findByIdOrThrow(dto.id());
         medico.update(dto);
 
         return ResponseEntity.ok(new MedicoDetailsDto(medico));
@@ -48,7 +54,7 @@ public class MedicoController {
     @DeleteMapping("/{id}")
     @Transactional
     public ResponseEntity<Void> delete(@PathVariable Long id) {
-        var medico = repository.getReferenceById(id);
+        var medico = findByIdOrThrow(id);
         medico.delete();
 
         return ResponseEntity.noContent().build();
@@ -56,7 +62,11 @@ public class MedicoController {
 
     @GetMapping("/{id}")
     public ResponseEntity<MedicoDetailsDto> readById(@PathVariable Long id) {
-        var medico = repository.getReferenceById(id);
+        var medico = findByIdOrThrow(id);
         return ResponseEntity.ok(new MedicoDetailsDto(medico));
+    }
+
+    private Medico findByIdOrThrow(Long id) {
+        return repository.findById(id).orElseThrow(() -> new MedicoNotFoundException(id));
     }
 }

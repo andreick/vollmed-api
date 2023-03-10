@@ -1,4 +1,4 @@
-package med.voll.api.domain.medico;
+package med.voll.api.domain.medico.dto;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
