@@ -1,20 +1,18 @@
 package med.voll.api.system.exception;
 
-import jakarta.persistence.EntityNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import java.sql.SQLIntegrityConstraintViolationException;
-
 @RestControllerAdvice
 public class RestExceptionHandler {
 
-    @ExceptionHandler(EntityNotFoundException.class)
-    public ResponseEntity<ErrorResponse> handleEntityNotFound(EntityNotFoundException ex) {
-        var status = HttpStatus.NOT_FOUND;
+    @ExceptionHandler(BusinessRuleException.class)
+    public ResponseEntity<ErrorResponse> handleBusinessRuleException(BusinessRuleException ex) {
+        var status = ex.getStatus();
         var error = new ErrorResponse(status, ex.getMessage());
         return new ResponseEntity<>(error, status);
     }
@@ -27,9 +25,16 @@ public class RestExceptionHandler {
         return new ResponseEntity<>(error, status);
     }
 
-    @ExceptionHandler(SQLIntegrityConstraintViolationException.class)
-    public ResponseEntity<ErrorResponse> handleSQLConstraintViolation(SQLIntegrityConstraintViolationException ex) {
-        var status = HttpStatus.BAD_REQUEST;
+    @ExceptionHandler(BadCredentialsException.class)
+    public ResponseEntity<ErrorResponse> handleUnauthorizedException(Exception ex) {
+        var status = HttpStatus.UNAUTHORIZED;
+        var error = new ErrorResponse(status, ex.getMessage());
+        return new ResponseEntity<>(error, status);
+    }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<ErrorResponse> handleInternalServerError(Exception ex) {
+        var status = HttpStatus.INTERNAL_SERVER_ERROR;
         var error = new ErrorResponse(status, ex.getMessage());
         return new ResponseEntity<>(error, status);
     }

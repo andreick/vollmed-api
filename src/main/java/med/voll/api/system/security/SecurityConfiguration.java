@@ -29,6 +29,11 @@ public class SecurityConfiguration {
                 .requestMatchers(HttpMethod.POST, "/login").permitAll()
                 .anyRequest().authenticated()
                 .and().addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
+                .exceptionHandling().authenticationEntryPoint((request, response, authException) -> {
+                    response.setStatus(401);
+                    response.setCharacterEncoding("UTF-8");
+                    response.getWriter().write(authException.getMessage());
+                }).and()
                 .build();
     }
 
