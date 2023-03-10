@@ -25,6 +25,7 @@ public record PacienteCreateDto(
         @Pattern(regexp = "\\d{11}")
         String cpf,
 
+        @NotNull
         @Valid
         EnderecoDto endereco
 ) {
