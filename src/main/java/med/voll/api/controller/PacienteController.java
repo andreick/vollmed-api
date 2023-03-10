@@ -6,6 +6,7 @@ import med.voll.api.domain.paciente.PacienteService;
 import med.voll.api.domain.paciente.dto.PacienteCreateDto;
 import med.voll.api.domain.paciente.dto.PacienteDetailsDto;
 import med.voll.api.domain.paciente.dto.PacienteReadDto;
+import med.voll.api.domain.paciente.dto.PacienteUpdateDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -33,14 +34,25 @@ public class PacienteController {
 
     @GetMapping
     public ResponseEntity<Page<PacienteReadDto>> readAll(@PageableDefault(sort = {"nome"}) Pageable pageable) {
-        var pacientes = pacienteService.findAll(pageable);
+        var pacientes = pacienteService.findAllAtivo(pageable);
         return ResponseEntity.ok(pacienteMapper.toReadDto(pacientes));
     }
 
-    @GetMapping
-    @RequestMapping("/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<PacienteReadDto> readOne(@PathVariable Long id) {
-        var paciente = pacienteService.findById(id);
+        var paciente = pacienteService.findByIdAtivo(id);
         return ResponseEntity.ok(pacienteMapper.toReadDto(paciente));
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<PacienteDetailsDto> update(@PathVariable Long id, @RequestBody @Valid PacienteUpdateDto dto) {
+        var paciente = pacienteService.update(id, pacienteMapper.toPaciente(dto));
+        return ResponseEntity.ok(pacienteMapper.toDetailsDto(paciente));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
+        pacienteService.softDelete(id);
+        return ResponseEntity.noContent().build();
     }
 }

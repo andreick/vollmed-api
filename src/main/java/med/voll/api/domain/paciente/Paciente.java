@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import med.voll.api.domain.endereco.Endereco;
 
+import java.util.Objects;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -34,4 +36,14 @@ public class Paciente {
 
     @Column(nullable = false)
     private boolean ativo;
+
+    public void update(Paciente paciente) {
+        nome = Objects.requireNonNullElse(paciente.getNome(), nome);
+        telefone = Objects.requireNonNullElse(paciente.getTelefone(), telefone);
+        endereco = Objects.requireNonNullElse(paciente.getEndereco(), endereco);
+    }
+
+    public void delete() {
+        ativo = false;
+    }
 }
