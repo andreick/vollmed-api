@@ -5,8 +5,9 @@ import org.springframework.stereotype.Component;
 @Component
 public class EnderecoMapper {
 
-    public Endereco toEndereco(EnderecoDto enderecoDto) {
-        return new Endereco(enderecoDto);
+    public Endereco toEndereco(EnderecoDto dto) {
+        return dto != null ? new Endereco(dto.logradouro(), dto.numero(), dto.complemento(), dto.bairro(), dto.cidade(),
+                dto.uf(), dto.cep()) : null;
     }
 
     public EnderecoDto toDto(Endereco endereco) {

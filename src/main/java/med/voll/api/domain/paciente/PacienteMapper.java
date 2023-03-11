@@ -21,8 +21,8 @@ public class PacienteMapper {
     }
 
     public Paciente toPaciente(PacienteUpdateDto dto) {
-        var endereco = dto.endereco() != null ? enderecoMapper.toEndereco(dto.endereco()) : null;
-        return new Paciente(null, dto.nome(), null, dto.telefone(), null, endereco, true);
+        return new Paciente(null, dto.nome(), null, dto.telefone(), null,
+                enderecoMapper.toEndereco(dto.endereco()), true);
     }
 
     public PacienteDetailsDto toDetailsDto(Paciente paciente) {
@@ -34,7 +34,7 @@ public class PacienteMapper {
         return new PacienteReadDto(paciente.getNome(), paciente.getEmail(), paciente.getCpf());
     }
 
-    public Page<PacienteReadDto> toReadDto(Page<Paciente> pacientes) {
-        return pacientes.map(this::toReadDto);
+    public Page<PacienteReadDto> toReadDto(Page<Paciente> page) {
+        return page.map(this::toReadDto);
     }
 }

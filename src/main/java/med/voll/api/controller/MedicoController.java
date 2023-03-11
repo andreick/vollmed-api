@@ -1,20 +1,18 @@
 package med.voll.api.controller;
 
 import jakarta.validation.Valid;
-import med.voll.api.domain.medico.Medico;
-import med.voll.api.domain.medico.MedicoRepository;
+import med.voll.api.domain.medico.MedicoMapper;
+import med.voll.api.domain.medico.MedicoService;
 import med.voll.api.domain.medico.dto.MedicoCreateDto;
 import med.voll.api.domain.medico.dto.MedicoDetailsDto;
 import med.voll.api.domain.medico.dto.MedicoReadDto;
 import med.voll.api.domain.medico.dto.MedicoUpdateDto;
-import med.voll.api.domain.medico.exception.MedicoNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -23,50 +21,40 @@ import org.springframework.web.util.UriComponentsBuilder;
 public class MedicoController {
 
     @Autowired
-    private MedicoRepository repository;
+    private MedicoService medicoService;
+
+    @Autowired
+    private MedicoMapper medicoMapper;
 
     @PostMapping
-    @Transactional
     public ResponseEntity<MedicoDetailsDto> create(@RequestBody @Valid MedicoCreateDto dto, UriComponentsBuilder uriBuilder) {
-        var medico = new Medico(dto);
-        repository.save(medico);
-
+        var medico = medicoService.save(medicoMapper.toMedico(dto));
         var uri = uriBuilder.path("/medicos/{id}").buildAndExpand(medico.getId()).toUri();
-        return ResponseEntity.created(uri).body(new MedicoDetailsDto(medico));
+        return ResponseEntity.created(uri).body(medicoMapper.toDetailsDto(medico));
     }
 
     @GetMapping
     public ResponseEntity<Page<MedicoReadDto>> readAll(@PageableDefault(size = 20, sort = {"nome", "crm"},
             direction = Sort.Direction.DESC) Pageable pageable) {
-        var page = repository.findAllByAtivoTrue(pageable).map(MedicoReadDto::new);
-        return ResponseEntity.ok(page);
-    }
-
-    @PutMapping
-    @Transactional
-    public ResponseEntity<MedicoDetailsDto> update(@RequestBody @Valid MedicoUpdateDto dto) {
-        var medico = findByIdOrThrow(dto.id());
-        medico.update(dto);
-
-        return ResponseEntity.ok(new MedicoDetailsDto(medico));
-    }
-
-    @DeleteMapping("/{id}")
-    @Transactional
-    public ResponseEntity<Void> delete(@PathVariable Long id) {
-        var medico = findByIdOrThrow(id);
-        medico.delete();
-
-        return ResponseEntity.noContent().build();
+        var page = medicoService.findAllAtivo(pageable);
+        return ResponseEntity.ok(medicoMapper.toReadDto(page));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<MedicoDetailsDto> readById(@PathVariable Long id) {
-        var medico = findByIdOrThrow(id);
-        return ResponseEntity.ok(new MedicoDetailsDto(medico));
+    public ResponseEntity<MedicoDetailsDto> readOne(@PathVariable Long id) {
+        var medico = medicoService.findByIdAtivo(id);
+        return ResponseEntity.ok(medicoMapper.toDetailsDto(medico));
     }
 
-    private Medico findByIdOrThrow(Long id) {
-        return repository.findById(id).orElseThrow(() -> new MedicoNotFoundException(id));
+    @PutMapping("/{id}")
+    public ResponseEntity<MedicoDetailsDto> update(@PathVariable Long id, @RequestBody @Valid MedicoUpdateDto dto) {
+        var medico = medicoService.update(medicoMapper.toMedico(id, dto));
+        return ResponseEntity.ok(medicoMapper.toDetailsDto(medico));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
+        medicoService.softDelete(id);
+        return ResponseEntity.noContent().build();
     }
 }
