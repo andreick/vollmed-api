@@ -6,7 +6,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import med.voll.api.domain.endereco.EnderecoDto;
-import med.voll.api.domain.validation.constraints.TelefoneSemMascara;
+import med.voll.api.validation.constraints.TelefoneSemMascara;
 
 public record PacienteCreateDto(
 

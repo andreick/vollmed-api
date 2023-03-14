@@ -1,11 +1,15 @@
 package med.voll.api.domain.consulta.dto;
 
-import jakarta.validation.constraints.Future;
 import jakarta.validation.constraints.NotNull;
+import med.voll.api.domain.consulta.validation.constraints.EspecialidadeMedicoNulo;
+import med.voll.api.domain.consulta.validation.constraints.HorarioAntecedencia;
+import med.voll.api.domain.consulta.validation.constraints.HorarioFuncionamento;
 import med.voll.api.domain.medico.Especialidade;
+import med.voll.api.validation.constraints.EnumConstant;
 
 import java.time.LocalDateTime;
 
+@EspecialidadeMedicoNulo
 public record ConsultaScheduleDto(
 
         @NotNull
@@ -13,10 +17,12 @@ public record ConsultaScheduleDto(
 
         Long idMedico,
 
-        Especialidade especialidade,
+        @EnumConstant(enumClass = Especialidade.class, message = "deve ser uma especialidade válida")
+        String especialidade,
 
         @NotNull
-        @Future
+        @HorarioFuncionamento
+        @HorarioAntecedencia
         LocalDateTime data
 ) {
 }
