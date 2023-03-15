@@ -1,4 +1,4 @@
-package med.voll.api.domain.validation.constraints;
+package med.voll.api.validation.constraints;
 
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;

@@ -1,5 +1,6 @@
-package med.voll.api.system.exception;
+package med.voll.api.system.exception.handler;
 
+import med.voll.api.system.exception.BusinessRuleException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -34,6 +35,7 @@ public class RestExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleInternalServerError(Exception ex) {
+        ex.printStackTrace();
         var status = HttpStatus.INTERNAL_SERVER_ERROR;
         var error = new ErrorResponse(status, ex.getMessage());
         return new ResponseEntity<>(error, status);

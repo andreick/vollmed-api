@@ -31,7 +31,7 @@ public class PacienteMapper {
     }
 
     public PacienteReadDto toReadDto(Paciente paciente) {
-        return new PacienteReadDto(paciente.getNome(), paciente.getEmail(), paciente.getCpf());
+        return new PacienteReadDto(paciente.getId(), paciente.getNome(), paciente.getEmail(), paciente.getCpf());
     }
 
     public Page<PacienteReadDto> toReadDto(Page<Paciente> page) {

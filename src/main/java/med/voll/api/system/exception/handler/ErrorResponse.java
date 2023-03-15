@@ -1,4 +1,4 @@
-package med.voll.api.system.exception;
+package med.voll.api.system.exception.handler;
 
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
