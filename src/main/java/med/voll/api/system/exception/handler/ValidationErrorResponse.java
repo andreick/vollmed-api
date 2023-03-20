@@ -1,27 +1,29 @@
 package med.voll.api.system.exception.handler;
 
 import lombok.Getter;
-import org.springframework.http.HttpStatus;
+import lombok.NoArgsConstructor;
 import org.springframework.validation.FieldError;
 
 import java.util.List;
 
+@NoArgsConstructor
 @Getter
 public class ValidationErrorResponse extends ErrorResponse {
 
-    private final List<Error> errors;
+    private List<Error> errors;
 
-    public ValidationErrorResponse(HttpStatus status, String message, List<Error> errors) {
-        super(status, message);
+    public ValidationErrorResponse(String message, List<Error> errors) {
+        super(message);
         this.errors = errors;
     }
 
+    @NoArgsConstructor
     @Getter
     public static class Error {
 
-        private final String field;
-        private final Object rejectedValue;
-        private final String message;
+        private String field;
+        private Object rejectedValue;
+        private String message;
 
         public Error(FieldError error) {
             this.field = error.getField();

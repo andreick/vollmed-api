@@ -2,7 +2,6 @@ package med.voll.api.domain.consulta;
 
 import med.voll.api.domain.consulta.dto.ConsultaScheduleDto;
 import med.voll.api.domain.consulta.validation.ConsultaScheduleValidation;
-import med.voll.api.domain.medico.Especialidade;
 import med.voll.api.domain.medico.Medico;
 import med.voll.api.domain.medico.MedicoRepository;
 import med.voll.api.domain.medico.exception.MedicoUnavailableException;
@@ -39,9 +38,8 @@ public class ConsultaScheduleService {
         if (id != null) {
             return medicoRepository.getReferenceById(id);
         }
-        var especialidade = Especialidade.valueOf(dto.especialidade());
         var start = dto.data().minusHours(1);
         var end = dto.data().plusHours(1);
-        return medicoRepository.findRandomMedicoAvailable(especialidade, start, end).orElseThrow(MedicoUnavailableException::new);
+        return medicoRepository.findRandomMedicoAvailable(dto.especialidade(), start, end).orElseThrow(MedicoUnavailableException::new);
     }
 }

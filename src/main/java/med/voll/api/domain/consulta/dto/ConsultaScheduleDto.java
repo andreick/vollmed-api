@@ -5,7 +5,6 @@ import med.voll.api.domain.consulta.validation.constraints.EspecialidadeMedicoNu
 import med.voll.api.domain.consulta.validation.constraints.HorarioAntecedencia;
 import med.voll.api.domain.consulta.validation.constraints.HorarioFuncionamento;
 import med.voll.api.domain.medico.Especialidade;
-import med.voll.api.validation.constraints.EnumConstant;
 
 import java.time.LocalDateTime;
 
@@ -17,8 +16,7 @@ public record ConsultaScheduleDto(
 
         Long idMedico,
 
-        @EnumConstant(enumClass = Especialidade.class, message = "deve ser uma especialidade válida")
-        String especialidade,
+        Especialidade especialidade,
 
         @NotNull
         @HorarioFuncionamento
