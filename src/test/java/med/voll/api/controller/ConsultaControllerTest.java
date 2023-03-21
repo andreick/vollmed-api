@@ -2,6 +2,8 @@ package med.voll.api.controller;
 
 import med.voll.api.domain.consulta.Consulta;
 import med.voll.api.domain.consulta.ConsultaScheduleService;
+import med.voll.api.domain.consulta.MotivoCancelamento;
+import med.voll.api.domain.consulta.dto.ConsultaCancelDto;
 import med.voll.api.domain.consulta.dto.ConsultaDetailsDto;
 import med.voll.api.domain.consulta.dto.ConsultaScheduleDto;
 import med.voll.api.domain.medico.Medico;
@@ -29,6 +31,7 @@ import java.time.temporal.TemporalAdjusters;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
 @SpringBootTest
@@ -47,6 +50,9 @@ class ConsultaControllerTest {
 
     @Autowired
     private JacksonTester<ConsultaDetailsDto> consultaDetailsDtoJson;
+
+    @Autowired
+    private JacksonTester<ConsultaCancelDto> consultaCancelDtoJson;
 
     @MockBean
     private ConsultaScheduleService consultaScheduleService;
@@ -161,6 +167,34 @@ class ConsultaControllerTest {
 
         assertThat(response.getStatus()).isEqualTo(HttpStatus.OK.value());
         assertThat(response.getContentAsString()).isEqualTo(consultaDetailsDtoJson.write(consultaDetailsDto).getJson());
+    }
+
+    @Test
+    @WithMockUser
+    @DisplayName("O motivo do cancelamento da consulta é obrigatório")
+    void cancel_BadRequest_Obrigatorio() throws Exception {
+        var response = mvc.perform(delete("/consultas/1")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{}"))
+                .andReturn().getResponse();
+
+        assertThat(response.getStatus()).isEqualTo(HttpStatus.BAD_REQUEST.value());
+        var validationErrorResponse = validationErrorResponseJson.parseObject(response.getContentAsString());
+        assertThat(validationErrorResponse.getErrors()).anyMatch(error -> error.getField().equals("motivo"));
+    }
+
+    @Test
+    @WithMockUser
+    @DisplayName("Deve cancelar uma consulta agendada")
+    void cancel_NoContent() throws Exception {
+        var consultaCancelDto = new ConsultaCancelDto(MotivoCancelamento.MEDICO_CANCELOU);
+
+        var response = mvc.perform(delete("/consultas/1")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(consultaCancelDtoJson.write(consultaCancelDto).getJson()))
+                .andReturn().getResponse();
+
+        assertThat(response.getStatus()).isEqualTo(HttpStatus.NO_CONTENT.value());
     }
 
     private Paciente paciente() {

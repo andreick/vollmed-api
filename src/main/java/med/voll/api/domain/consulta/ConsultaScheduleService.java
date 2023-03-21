@@ -1,5 +1,6 @@
 package med.voll.api.domain.consulta;
 
+import med.voll.api.domain.consulta.dto.ConsultaCancelDto;
 import med.voll.api.domain.consulta.dto.ConsultaScheduleDto;
 import med.voll.api.domain.consulta.validation.ConsultaScheduleValidation;
 import med.voll.api.domain.medico.Medico;
@@ -41,5 +42,9 @@ public class ConsultaScheduleService {
         var start = dto.data().minusHours(1);
         var end = dto.data().plusHours(1);
         return medicoRepository.findRandomMedicoAvailable(dto.especialidade(), start, end).orElseThrow(MedicoUnavailableException::new);
+    }
+
+    public void cancel(Long id, ConsultaCancelDto dto) {
+
     }
 }
