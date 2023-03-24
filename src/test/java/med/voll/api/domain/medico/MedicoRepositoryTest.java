@@ -1,6 +1,7 @@
 package med.voll.api.domain.medico;
 
 import med.voll.api.domain.consulta.Consulta;
+import med.voll.api.domain.consulta.StatusConsulta;
 import med.voll.api.domain.endereco.Endereco;
 import med.voll.api.domain.paciente.Paciente;
 import org.junit.jupiter.api.BeforeEach;
@@ -67,7 +68,7 @@ class MedicoRepositoryTest {
     }
 
     private Consulta cadastrarConsulta(Paciente paciente, Medico medico, LocalDateTime data) {
-        return em.persist(new Consulta(null, paciente, medico, data));
+        return em.persist(new Consulta(null, paciente, medico, data, StatusConsulta.AGENDADO));
     }
 
     private Medico cadastrarMedico(String nome, String email, String crm, Especialidade especialidade, boolean ativo) {

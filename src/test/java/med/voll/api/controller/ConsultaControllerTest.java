@@ -3,6 +3,7 @@ package med.voll.api.controller;
 import med.voll.api.domain.consulta.Consulta;
 import med.voll.api.domain.consulta.ConsultaScheduleService;
 import med.voll.api.domain.consulta.MotivoCancelamento;
+import med.voll.api.domain.consulta.StatusConsulta;
 import med.voll.api.domain.consulta.dto.ConsultaCancelDto;
 import med.voll.api.domain.consulta.dto.ConsultaDetailsDto;
 import med.voll.api.domain.consulta.dto.ConsultaScheduleDto;
@@ -156,9 +157,9 @@ class ConsultaControllerTest {
                 .with(TemporalAdjusters.next(DayOfWeek.SATURDAY))
                 .atTime(18, 0);
         var consultaScheduleDto = new ConsultaScheduleDto(1L, 1L, null, proximoSabadoAs18);
-        var consultaDetailsDto = new ConsultaDetailsDto(1L, 1L, 1L, proximoSabadoAs18);
+        var consultaDetailsDto = new ConsultaDetailsDto(null, 1L, 1L, proximoSabadoAs18);
 
-        when(consultaScheduleService.schedule(any())).thenReturn(new Consulta(1L, paciente(), medico(), proximoSabadoAs18));
+        when(consultaScheduleService.schedule(any())).thenReturn(new Consulta(1L, paciente(), medico(), proximoSabadoAs18, StatusConsulta.AGENDADO));
 
         var response = mvc.perform(post("/consultas")
                         .contentType(MediaType.APPLICATION_JSON)

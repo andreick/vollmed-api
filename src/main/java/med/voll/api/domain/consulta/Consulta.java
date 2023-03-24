@@ -30,4 +30,19 @@ public class Consulta {
 
     @Column(nullable = false)
     private LocalDateTime data;
+
+    @Column(nullable = false, length = 25)
+    private StatusConsulta status;
+
+    @Column(name = "motivo_cancelamento", length = 50)
+    private MotivoCancelamento motivoCancelamento;
+
+    public Consulta(Long id, Paciente paciente, Medico medico, LocalDateTime data, StatusConsulta status) {
+        this(id, paciente, medico, data, status, null);
+    }
+
+    public void cancelar(MotivoCancelamento motivoCancelamento) {
+        status = StatusConsulta.CANCELADO;
+        this.motivoCancelamento = motivoCancelamento;
+    }
 }
