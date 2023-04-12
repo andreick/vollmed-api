@@ -1,11 +1,10 @@
 package med.voll.api.domain.medico.exception;
 
-import med.voll.api.system.exception.BusinessRuleException;
-import org.springframework.http.HttpStatus;
+import med.voll.api.system.exception.NotFoundException;
 
-public class MedicoNotFoundException extends BusinessRuleException {
+public class MedicoNotFoundException extends NotFoundException {
 
     public MedicoNotFoundException(Long id) {
-        super("Médico com id " + id + " não encontrado", HttpStatus.NOT_FOUND);
+        super("Médico com id " + id + " não encontrado");
     }
 }

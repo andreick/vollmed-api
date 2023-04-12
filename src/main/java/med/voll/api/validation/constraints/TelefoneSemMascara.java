@@ -1,12 +1,9 @@
-package med.voll.api.domain.validation.constraints;
+package med.voll.api.validation.constraints;
 
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
 import jakarta.validation.ReportAsSingleViolation;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Null;
-import org.hibernate.validator.constraints.CompositionType;
-import org.hibernate.validator.constraints.ConstraintComposition;
+import jakarta.validation.constraints.Pattern;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
@@ -15,17 +12,15 @@ import java.lang.annotation.Target;
 
 import static java.lang.annotation.ElementType.*;
 
-@Null
-@NotBlank
+@Pattern(regexp = "[1-9]{2}(9[1-9]|[2-8])\\d{7}")
 @ReportAsSingleViolation
 @Target({METHOD, FIELD, ANNOTATION_TYPE, CONSTRUCTOR, PARAMETER, TYPE_USE})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 @Constraint(validatedBy = {})
-@ConstraintComposition(CompositionType.OR)
-public @interface NullOrNotBlank {
+public @interface TelefoneSemMascara {
 
-    String message() default "must be null or not blank";
+    String message() default "deve ser um telefone válido sem máscara de 10 ou 11 dígitos";
 
     Class<?>[] groups() default {};
 

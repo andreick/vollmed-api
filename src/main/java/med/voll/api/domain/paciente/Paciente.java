@@ -1,4 +1,4 @@
-package med.voll.api.domain.medico;
+package med.voll.api.domain.paciente;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -11,9 +11,9 @@ import java.util.Objects;
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
-@Entity(name = "Medico")
-@Table(name = "medicos")
-public class Medico {
+@Entity(name = "Paciente")
+@Table(name = "pacientes")
+public class Paciente {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,12 +28,8 @@ public class Medico {
     @Column(nullable = false, length = 15)
     private String telefone;
 
-    @Column(nullable = false, length = 6, unique = true)
-    private String crm;
-
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false, length = 100)
-    private Especialidade especialidade;
+    @Column(nullable = false, length = 14, unique = true)
+    private String cpf;
 
     @Embedded
     private Endereco endereco;
@@ -41,10 +37,10 @@ public class Medico {
     @Column(nullable = false)
     private boolean ativo;
 
-    public void update(Medico medico) {
-        nome = Objects.requireNonNullElse(medico.getNome(), nome);
-        telefone = Objects.requireNonNullElse(medico.getTelefone(), telefone);
-        endereco = Objects.requireNonNullElse(medico.getEndereco(), endereco);
+    public void update(Paciente paciente) {
+        nome = Objects.requireNonNullElse(paciente.getNome(), nome);
+        telefone = Objects.requireNonNullElse(paciente.getTelefone(), telefone);
+        endereco = Objects.requireNonNullElse(paciente.getEndereco(), endereco);
     }
 
     public void delete() {
